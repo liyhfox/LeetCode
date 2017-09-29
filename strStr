@@ -1,0 +1,39 @@
+Implement strStr().
+Returns the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        int h_len = haystack.size();
+        int n_len = needle.size();
+        if(n_len == 0) return 0;
+        if(h_len >= n_len) {
+            int Ascii[256] = { -1 };
+            for(int i = 0; i < n_len; ++i)
+                Ascii[(int)needle[i]] = i;
+            
+            int i = 0;
+            int j = 0;
+            while(i <= h_len - n_len) {
+                j = 0;
+                while(j < n_len) {
+                    if(haystack[i] == needle[j]) {
+                        ++i;
+                        ++j;
+                    }
+                    else {
+                        int p = i + n_len - j;
+                        if(Ascii[haystack[p]] == -1)
+                            i += n_len - j + 1;
+                        else
+                            i += n_len - j - Ascii[haystack[p]];
+                        break;
+                    }
+                }
+                if(j == n_len)
+                    return i - n_len;
+            }
+        }
+        return -1;
+    }
+};
